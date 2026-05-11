@@ -1,0 +1,80 @@
+import type { Metadata, Viewport } from 'next'
+import { Inter } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Navbar } from '@/components/layout/navbar'
+import { Footer } from '@/components/layout/footer'
+import './globals.css'
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Provic Technologies | Premium Tech Gadgets for Students, Developers & Creators',
+    template: '%s | Provic Technologies',
+  },
+  description: 'Provic Technologies delivers reliable gadgets, accessories, and modern tech essentials with professionalism, trust, and speed. Shop laptops, earbuds, keyboards, smartwatches and more.',
+  keywords: ['tech gadgets', 'laptops', 'earbuds', 'keyboards', 'smartwatches', 'power banks', 'accessories', 'students', 'developers', 'creators', 'Nigeria'],
+  authors: [{ name: 'Provic Technologies' }],
+  creator: 'Provic Technologies',
+  publisher: 'Provic Technologies',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://provictech.com',
+    siteName: 'Provic Technologies',
+    title: 'Provic Technologies | Premium Tech Gadgets',
+    description: 'Trusted tech gadgets for students, developers & creators. Fast delivery, secure transactions, affordable pricing.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Provic Technologies | Premium Tech Gadgets',
+    description: 'Trusted tech gadgets for students, developers & creators.',
+    creator: '@Provictech',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#1a1f36' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning className="bg-background">
+      <body className={`${inter.variable} font-sans antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          <div className="relative min-h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </ThemeProvider>
+        {process.env.NODE_ENV === 'production' && <Analytics />}
+      </body>
+    </html>
+  )
+}
