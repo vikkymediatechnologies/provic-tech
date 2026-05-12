@@ -1,4 +1,5 @@
 import { HeroSection } from '@/components/home/hero-section'
+import { Analytics } from "@vercel/analytics/next"
 import { TrustedBrands } from '@/components/home/trusted-brands'
 import { FeaturedCategories } from '@/components/home/featured-categories'
 import { FeaturedProducts } from '@/components/home/featured-products'
@@ -9,6 +10,7 @@ import { CTASection } from '@/components/home/cta-section'
 export default function HomePage() {
   return (
     <>
+      <Analytics />
       <HeroSection />
       <TrustedBrands />
       <FeaturedCategories />
