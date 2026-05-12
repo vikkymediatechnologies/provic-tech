@@ -5,25 +5,25 @@ import { Rocket, Users, Award, Globe } from 'lucide-react'
 
 const milestones = [
   {
-    year: '2021',
+    year: '2024',
     title: 'The Beginning',
     description: 'Started as a small operation helping fellow students source quality laptops and accessories.',
     icon: Rocket,
   },
   {
-    year: '2022',
+    year: '2025',
     title: 'Growing Community',
     description: 'Reached our first 1,000 customers. Expanded to earbuds, keyboards, and power banks.',
     icon: Users,
   },
   {
-    year: '2023',
+    year: '2026',
     title: 'Building Trust',
     description: 'Established partnerships with authorized distributors. Launched tech consultation services.',
     icon: Award,
   },
   {
-    year: '2024',
+    year: '2027',
     title: 'Going Nationwide',
     description: 'Expanded delivery to all 36 states. Surpassed 5,000 happy customers. Launched premium workspace solutions.',
     icon: Globe,
