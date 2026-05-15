@@ -10,10 +10,7 @@ import {
   Truck, 
   Shield, 
   RotateCcw, 
-  Check, 
   ChevronLeft,
-  Package,
-  Clock,
   Award
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -27,13 +24,14 @@ interface ProductDetailsProps {
 
 export function ProductDetails({ product }: ProductDetailsProps) {
   const [selectedImage, setSelectedImage] = useState(0)
-  
-  // Simulate multiple product images
-  const productImages = [
-    product.image,
-    product.image,
-    product.image,
-  ]
+
+  // Safe fallback: supports both old `image` string and new `images` array
+  const productImages: string[] =
+    Array.isArray(product.images) && product.images.length > 0
+      ? product.images
+      : (product as any).image
+      ? [(product as any).image]
+      : ['/placeholder.jpg']
 
   return (
     <section className="py-8 lg:py-12">
@@ -66,7 +64,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 src={productImages[selectedImage]}
                 alt={product.name}
                 fill
-                className="object-cover"
+                className="object-cover transition-all duration-300"
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 priority
               />
@@ -77,28 +75,30 @@ export function ProductDetails({ product }: ProductDetailsProps) {
               )}
             </div>
             
-            {/* Thumbnails */}
-            <div className="flex gap-3">
-              {productImages.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`relative w-20 h-20 rounded-xl overflow-hidden bg-muted border-2 transition-all ${
-                    selectedImage === index
-                      ? 'border-gold ring-2 ring-gold/20'
-                      : 'border-transparent hover:border-border'
-                  }`}
-                >
-                  <Image
-                    src={image}
-                    alt={`${product.name} thumbnail ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="80px"
-                  />
-                </button>
-              ))}
-            </div>
+            {/* Thumbnails — only show if more than 1 image */}
+            {productImages.length > 1 && (
+              <div className="flex gap-3">
+                {productImages.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`relative w-20 h-20 rounded-xl overflow-hidden bg-muted border-2 transition-all ${
+                      selectedImage === index
+                        ? 'border-gold ring-2 ring-gold/20'
+                        : 'border-transparent hover:border-border'
+                    }`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${product.name} thumbnail ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="80px"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </motion.div>
 
           {/* Product Info */}
@@ -251,6 +251,83 @@ export function ProductDetails({ product }: ProductDetailsProps) {
             )}
           </motion.div>
         </div>
+
+        {/* ── REVIEWS SECTION ── */}
+        {product.reviewList && product.reviewList.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mt-16"
+          >
+            <h2 className="text-2xl font-bold text-foreground mb-8">
+              Customer Reviews ({product.reviews})
+            </h2>
+
+            {/* Average Rating Summary */}
+            <div className="flex items-center gap-6 p-6 rounded-2xl bg-muted/50 mb-8">
+              <div className="text-center shrink-0">
+                <p className="text-5xl font-bold text-gold">{product.rating}</p>
+                <div className="flex items-center gap-0.5 justify-center mt-2">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${
+                        i < Math.floor(product.rating) ? 'text-gold fill-gold' : 'text-border'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">{product.reviews} reviews</p>
+              </div>
+              <Separator orientation="vertical" className="h-20" />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Customers love this product for its quality, performance, and fast delivery. 
+                Verified buyers rate it highly for value and reliability.
+              </p>
+            </div>
+
+            {/* Review Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {product.reviewList.map((review, index) => (
+                <motion.div
+                  key={review.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                  className="p-5 rounded-2xl border border-border bg-card flex flex-col gap-3"
+                >
+                  {/* Reviewer Info */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gold/20 text-gold font-bold flex items-center justify-center text-sm shrink-0">
+                      {review.avatar}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-foreground text-sm truncate">{review.author}</p>
+                      <p className="text-xs text-muted-foreground">{review.date}</p>
+                    </div>
+                    <Badge variant="secondary" className="text-xs shrink-0">Verified</Badge>
+                  </div>
+
+                  {/* Stars */}
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3.5 h-3.5 ${
+                          i < review.rating ? 'text-gold fill-gold' : 'text-border'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Comment */}
+                  <p className="text-sm text-muted-foreground leading-relaxed">{review.comment}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </div>
     </section>
   )

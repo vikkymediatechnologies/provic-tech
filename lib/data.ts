@@ -1,3 +1,20 @@
+// export interface Product {
+//   id: string
+//   name: string
+//   description: string
+//   price: number
+//   originalPrice?: number
+//   category: string
+//   image: string
+//   rating: number
+//   reviews: number
+//   inStock: boolean
+//   featured?: boolean
+//   specifications?: Record<string, string>
+//   warranty?: string
+//   deliveryTime?: string
+// }
+
 export interface Product {
   id: string
   name: string
@@ -5,11 +22,25 @@ export interface Product {
   price: number
   originalPrice?: number
   category: string
-  image: string
+
+  // ✅ CHANGE: was image: string
+  images: string[]
+
   rating: number
   reviews: number
+
+  // ✅ ADD
+  reviewList?: {
+    id: number
+    author: string
+    avatar: string
+    rating: number
+    date: string
+    comment: string
+  }[]
+
   inStock: boolean
-  featured?: boolean
+  featured: boolean
   specifications?: Record<string, string>
   warranty?: string
   deliveryTime?: string
@@ -102,7 +133,7 @@ export const products: Product[] = [
     price: 1499000,
     originalPrice: 1650000,
     category: 'laptops',
-    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop',
+  images: ['/powerbank/1.jpg', '/powerbank/2.jpg', '/powerbank/5.jpg'],
     rating: 4.9,
     reviews: 128,
     inStock: true,
@@ -124,7 +155,7 @@ export const products: Product[] = [
     price: 1199000,
     originalPrice: 1320000,
     category: 'laptops',
-    image: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600&h=400&fit=crop',
+  images: ['/powerbank/1.jpg', '/powerbank/2.jpg', '/powerbank/5.jpg'],
     rating: 4.8,
     reviews: 214,
     inStock: true,
@@ -146,7 +177,7 @@ export const products: Product[] = [
     price: 750000,
     originalPrice: 850000,
     category: 'laptops',
-    image: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&h=400&fit=crop',
+  images: ['/powerbank/1.jpg', '/powerbank/2.jpg', '/powerbank/5.jpg'],
     rating: 4.7,
     reviews: 89,
     inStock: true,
@@ -584,28 +615,82 @@ export const products: Product[] = [
   },
 
   // ─── POWER BANKS (6) ────────────────────────────────────────────
+  // {
+  //   id: 'EASYPIE-20000',
+  //   name: 'EASYPIE Power Bank',
+  //   description: 'EASYPIE 20000mAh Ultra Slim Power Bank Fast Charging & Dual USB Ports Portable Charger for Mobile Phone.',
+  //   price: 10000,
+  //   originalPrice: 20000,
+  //   category: 'power-banks',
+  //   image: '/powerbank/1.jpg',
+  //   rating: 4.8,
+  //   reviews: 10,
+  //   inStock: true,
+  //   featured: true,
+  //   specifications: {
+  //     'Capacity': '24,000mAh',
+  //     'Output': '140W Max',
+  //     'Ports': '2 USB-C, 1 USB-A',
+  //     'Display': 'Smart LED Display',
+  //     'Recharge': '1.5 hours (140W)',
+  //   },
+  //   warranty: '6 Months',
+  //   deliveryTime: '1-2 business days',
+  // },
   {
-    id: 'anker-737',
-    name: 'Anker 737 Power Bank',
-    description: '24,000mAh portable charger with 140W output, smart display, and bi-directional fast charging.',
-    price: 85000,
-    originalPrice: 95000,
-    category: 'power-banks',
-    image: 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=600&h=400&fit=crop',
-    rating: 4.8,
-    reviews: 267,
-    inStock: true,
-    featured: true,
-    specifications: {
-      'Capacity': '24,000mAh',
-      'Output': '140W Max',
-      'Ports': '2 USB-C, 1 USB-A',
-      'Display': 'Smart LED Display',
-      'Recharge': '1.5 hours (140W)',
+  id: 'EASYPIE-20000',
+  name: 'EASYPIE Power Bank',
+  description: 'EASYPIE 20000mAh Ultra Slim Power Bank Fast Charging & Dual USB Ports Portable Charger for Mobile Phone.',
+  price: 10000,
+  originalPrice: 20000,
+  category: 'power-banks',
+
+  // ✅ CHANGE: was image: '/powerbank/1.jpg'
+  images: ['/powerbank/1.jpg', '/powerbank/2.jpg', '/powerbank/5.jpg'],
+
+  rating: 4.8,
+  reviews: 10, // keep this as the count for the card
+
+  // ✅ ADD: actual review objects
+  reviewList: [
+    {
+      id: 1,
+      author: 'Chukwuemeka O.',
+      avatar: 'CO',
+      rating: 5,
+      date: '2024-12-10',
+      comment: 'Excellent power bank! Charges my phone super fast and the battery life is amazing.',
     },
-    warranty: '18 Months Anker Warranty',
-    deliveryTime: '1-2 business days',
+    {
+      id: 2,
+      author: 'Fatima A.',
+      avatar: 'FA',
+      rating: 5,
+      date: '2024-12-05',
+      comment: 'Very slim and portable. Great value for the price.',
+    },
+    {
+      id: 3,
+      author: 'Tunde B.',
+      avatar: 'TB',
+      rating: 4,
+      date: '2024-11-28',
+      comment: 'Good product. Delivery was fast too.',
+    },
+  ],
+
+  inStock: true,
+  featured: true,
+  specifications: {
+    'Capacity': '24,000mAh',
+    'Output': '140W Max',
+    'Ports': '2 USB-C, 1 USB-A',
+    'Display': 'Smart LED Display',
+    'Recharge': '1.5 hours (140W)',
   },
+  warranty: '6 Months',
+  deliveryTime: '1-2 business days',
+},
   {
     id: 'anker-prime-20000',
     name: 'Anker Prime 20,000mAh',

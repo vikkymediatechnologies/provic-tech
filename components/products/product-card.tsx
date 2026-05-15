@@ -12,12 +12,18 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  // Safe fallback: works whether product has old `image` string or new `images` array
+  const firstImage =
+    Array.isArray(product.images) && product.images.length > 0
+      ? product.images[0]
+      : (product as any).image ?? '/placeholder.jpg'
+
   return (
     <div className="group relative bg-card rounded-2xl border border-border overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-gold/5 hover:border-gold/30 h-full flex flex-col">
       {/* Image Container */}
       <div className="relative aspect-square bg-muted overflow-hidden">
         <Image
-          src={product.image}
+          src={firstImage}
           alt={product.name}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"
