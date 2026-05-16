@@ -495,7 +495,7 @@ export const testimonials: Testimonial[] = [
     name: 'Adebayo Johnson',
     role: 'Software Developer',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
-    content: 'Provic Technologies delivered my MacBook Pro in just 2 days! The packaging was premium and the laptop was exactly as described. Best tech vendor in Lagos.',
+    content: 'Provic Technologies delivered my MacBook Pro in just 2 days! The packaging was premium and the laptop was exactly as described. Best tech vendor in Ibadan.',
     rating: 5,
   },
   {
