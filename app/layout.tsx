@@ -7,6 +7,14 @@ import { Navbar } from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
 import './globals.css'
 
+import { Bebas_Neue } from 'next/font/google'
+
+const bebasNeue = Bebas_Neue({ 
+  subsets: ['latin'], 
+  weight: '400',
+  variable: '--font-bebas',
+})
+
 const inter = Inter({ 
   subsets: ['latin'],
   variable: '--font-inter',
@@ -58,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="bg-background">
+    <html lang="en" suppressHydrationWarning className={`${bebasNeue.variable} bg-background`}>
       <body className={`${inter.variable} font-sans antialiased`}>
 
         {/* Google Analytics */}
