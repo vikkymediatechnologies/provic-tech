@@ -47,7 +47,7 @@ const contactItems = [
   { icon: Phone,         label: 'Sales',   value: '0903 598 6632',        href: 'tel:09035986632'           },
   { icon: MessageCircle, label: 'Support', value: '+234 806 878 6708',    href: 'tel:+2348068786708'        },
   { icon: Mail,          label: 'Email',   value: 'hello@provictech.com', href: 'mailto:hello@provictech.com'},
-  { icon: MapPin,        label: 'Address', value: 'Lagos, Nigeria',       href: 'https://maps.google.com/?q=Lagos,Nigeria'},
+  { icon: MapPin,        label: 'Address', value: 'Ibadan, Nigeria',       href: 'https://maps.google.com/?q=Ibadan,Nigeria'},
 ]
 
 // ─── Link column ──────────────────────────────────────────────────────────────

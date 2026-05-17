@@ -343,7 +343,7 @@ export function Navbar() {
 
               <span className="text-[9px] tracking-[0.3em] uppercase
                 text-black/20 dark:text-white/20 font-medium">
-                Lagos, NG
+                Ibadan, NG
               </span>
             </motion.div>
           </motion.div>
