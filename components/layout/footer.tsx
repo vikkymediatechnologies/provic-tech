@@ -2,221 +2,278 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { 
-  Mail, 
-  Phone, 
+import {
+  Mail,
+  Phone,
   MapPin,
   Twitter,
   Instagram,
   Facebook,
   Linkedin,
   MessageCircle,
-  Send
+  Send,
+  ArrowUpRight,
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 
+// ─── Data ─────────────────────────────────────────────────────────────────────
 const footerLinks = {
   products: [
-    { label: 'Laptops', href: '/products?category=laptops' },
-    { label: 'Earbuds', href: '/products?category=earbuds' },
-    { label: 'Keyboards', href: '/products?category=keyboards' },
-    { label: 'Power Banks', href: '/products?category=power-banks' },
-    { label: 'Smartwatches', href: '/products?category=smartwatches' },
-    { label: 'Accessories', href: '/products?category=accessories' },
+    { label: 'Laptops',       href: '/products?category=laptops'      },
+    { label: 'Earbuds',       href: '/products?category=earbuds'      },
+    { label: 'Keyboards',     href: '/products?category=keyboards'    },
+    { label: 'Power Banks',   href: '/products?category=power-banks'  },
+    { label: 'Smartwatches',  href: '/products?category=smartwatches' },
+    { label: 'Accessories',   href: '/products?category=accessories'  },
   ],
   company: [
-    { label: 'About Us', href: '/about' },
-    { label: 'Services', href: '/services' },
-    { label: 'FAQ', href: '/faq' },
-    { label: 'Contact', href: '/contact' },
+    { label: 'About Us', href: '/about'   },
+    { label: 'Services', href: '/services'},
+    { label: 'FAQ',      href: '/faq'     },
+    { label: 'Contact',  href: '/contact' },
   ],
 }
 
 const socialLinks = [
-  { icon: Twitter,   href: 'https://twitter.com/provictech',          label: 'Twitter' },
-  { icon: Instagram, href: 'https://instagram.com/provictech',        label: 'Instagram' },
-  { icon: Facebook,  href: 'https://facebook.com/provictech',         label: 'Facebook' },
-  { icon: Linkedin,  href: 'https://linkedin.com/company/provictech', label: 'LinkedIn' },
+  { icon: Twitter,     href: 'https://twitter.com/provictech',          label: 'Twitter'   },
+  { icon: Instagram,   href: 'https://instagram.com/provictech',        label: 'Instagram' },
+  { icon: Facebook,    href: 'https://facebook.com/provictech',         label: 'Facebook'  },
+  { icon: Linkedin,    href: 'https://linkedin.com/company/provictech', label: 'LinkedIn'  },
+  { icon: MessageCircle, href: 'https://wa.me/2349035986632',           label: 'WhatsApp'  },
 ]
 
-export function Footer() {
-  return (
-    <footer className="bg-card border-t border-border">
-      {/* Main Footer */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14 lg:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
+const contactItems = [
+  { icon: Phone,         label: 'Sales',   value: '0903 598 6632',        href: 'tel:09035986632'           },
+  { icon: MessageCircle, label: 'Support', value: '+234 806 878 6708',    href: 'tel:+2348068786708'        },
+  { icon: Mail,          label: 'Email',   value: 'hello@provictech.com', href: 'mailto:hello@provictech.com'},
+  { icon: MapPin,        label: 'Address', value: 'Lagos, Nigeria',       href: 'https://maps.google.com/?q=Lagos,Nigeria'},
+]
 
-          {/* Brand Column */}
-          <div className="sm:col-span-2 lg:col-span-2">
+// ─── Link column ──────────────────────────────────────────────────────────────
+function LinkColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-5">
+        <div className="w-4 h-px bg-gold" />
+        <span className="text-[10px] tracking-[0.25em] uppercase text-gold font-bold">{title}</span>
+      </div>
+      <ul className="flex flex-col gap-2.5">
+        {links.map((link) => (
+          <li key={link.label}>
+            <Link
+              href={link.href}
+              className="group flex items-center gap-1 text-sm text-black/45 dark:text-white/45
+                hover:text-black dark:hover:text-white transition-colors duration-200"
+            >
+              {link.label}
+              <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 text-gold" />
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+// ─── Main Footer ──────────────────────────────────────────────────────────────
+export function Footer() {
+  const [email, setEmail] = useState('')
+  const [subbed, setSubbed] = useState(false)
+
+  const handleNewsletter = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+    setSubbed(true)
+  }
+
+  return (
+    <footer className="relative bg-white dark:bg-[#080808] overflow-hidden">
+
+      {/* ── Top hairline ── */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-black/[0.07] dark:bg-white/[0.07]" />
+
+      {/* ── Ambient gold glow ── */}
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[50vw] h-80 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse, hsl(43 96% 56% / 0.05) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }}
+      />
+
+      {/* ══════════════ MAIN BODY ══════════════ */}
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-14 pt-16 pb-12 lg:pt-20 lg:pb-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
+
+          {/* ── Brand column (wide) ── */}
+          <div className="sm:col-span-2 lg:col-span-4 flex flex-col gap-7">
+
             {/* Logo */}
-            <Link href="/" className="inline-block mb-5">
-              <motion.div whileHover={{ scale: 1.04 }} transition={{ duration: 0.2 }}>
+            <Link href="/" className="inline-block w-fit">
+              <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
                 <Image
                   src="/provic.png"
                   alt="Provic Technologies"
                   width={220}
                   height={66}
-                  className="h-14 sm:h-16 w-auto object-contain drop-shadow-sm"
+                  className="h-14 w-auto object-contain"
                   priority
                 />
               </motion.div>
             </Link>
 
-            <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-sm leading-relaxed">
-              Your trusted partner for premium tech gadgets. We deliver quality, reliability,
+            {/* tagline */}
+            <p className="text-sm text-black/45 dark:text-white/45 leading-relaxed max-w-xs">
+              Your trusted partner for premium tech gadgets. Delivering quality, reliability,
               and exceptional service to students, developers, and creators across Nigeria.
             </p>
 
             {/* Newsletter */}
-            <div className="mb-6">
-              <h4 className="text-sm font-semibold text-foreground mb-3">
-                Subscribe to our newsletter
-              </h4>
-              <form
-                className="flex gap-2 w-full max-w-sm"
-                onSubmit={(e) => e.preventDefault()}
-              >
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 min-w-0 rounded-lg bg-background text-sm"
-                />
-                <Button
-                  type="submit"
-                  size="icon"
-                  className="bg-gold hover:bg-gold-dark text-navy-dark rounded-lg shrink-0"
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-4 h-px bg-gold" />
+                <span className="text-[10px] tracking-[0.25em] uppercase text-gold font-bold">
+                  Newsletter
+                </span>
+              </div>
+
+              {subbed ? (
+                <motion.p
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-sm text-gold font-semibold"
                 >
-                  <Send className="w-4 h-4" />
-                </Button>
-              </form>
+                  You&apos;re subscribed ✓
+                </motion.p>
+              ) : (
+                <form onSubmit={handleNewsletter} className="flex gap-2 max-w-xs">
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="flex-1 h-10 px-4 rounded-xl text-sm
+                      bg-black/[0.03] dark:bg-white/[0.04]
+                      border border-black/10 dark:border-white/10
+                      text-black dark:text-white placeholder:text-black/25 dark:placeholder:text-white/25
+                      focus:outline-none focus:border-gold/50
+                      transition-all duration-200"
+                  />
+                  <motion.button
+                    type="submit"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-10 h-10 rounded-xl bg-gold text-black
+                      flex items-center justify-center shrink-0
+                      hover:bg-gold/90 transition-colors duration-200
+                      shadow-md shadow-gold/20"
+                  >
+                    <Send className="w-4 h-4" />
+                  </motion.button>
+                </form>
+              )}
             </div>
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-              {socialLinks.map((social) => (
-                <Link
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                  className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-muted hover:bg-gold/10 hover:text-gold transition-colors"
-                >
-                  <social.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                </Link>
-              ))}
+            {/* Social icons */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {socialLinks.map((s) => {
+                const Icon = s.icon
+                return (
+                  <Link
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="group w-9 h-9 rounded-xl
+                      bg-black/[0.03] dark:bg-white/[0.04]
+                      border border-black/8 dark:border-white/8
+                      hover:border-gold/35 hover:bg-gold/[0.06]
+                      flex items-center justify-center transition-all duration-300"
+                  >
+                    <Icon className="w-4 h-4 text-black/40 dark:text-white/40 group-hover:text-gold transition-colors duration-300" />
+                  </Link>
+                )
+              })}
             </div>
           </div>
 
-          {/* Products Column */}
-          <div className="min-w-0">
-            <h4 className="text-xs sm:text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
-              Products
-            </h4>
-            <ul className="space-y-2.5 sm:space-y-3">
-              {footerLinks.products.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-gold transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* ── Products column ── */}
+          <div className="lg:col-span-2 lg:col-start-6">
+            <LinkColumn title="Products" links={footerLinks.products} />
           </div>
 
-          {/* Company Column */}
-          <div className="min-w-0">
-            <h4 className="text-xs sm:text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
-              Company
-            </h4>
-            <ul className="space-y-2.5 sm:space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-gold transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* ── Company column ── */}
+          <div className="lg:col-span-2">
+            <LinkColumn title="Company" links={footerLinks.company} />
           </div>
 
-          {/* Contact Column */}
-          <div className="sm:col-span-2 lg:col-span-1 min-w-0">
-            <h4 className="text-xs sm:text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
-              Contact
-            </h4>
-            <ul className="space-y-3 sm:space-y-4">
-              <li className="flex items-start gap-3">
-                <Phone className="w-4 h-4 text-gold mt-0.5 shrink-0" />
-                <div className="min-w-0">
-                  <p className="text-sm text-foreground font-medium">Sales</p>
-                  <a
-                    href="tel:09035986632"
-                    className="text-sm text-muted-foreground hover:text-gold transition-colors"
-                  >
-                    0903 598 6632
-                  </a>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <MessageCircle className="w-4 h-4 text-gold mt-0.5 shrink-0" />
-                <div className="min-w-0">
-                  <p className="text-sm text-foreground font-medium">Support</p>
-                  <a
-                    href="tel:+2348068786708"
-                    className="text-sm text-muted-foreground hover:text-gold transition-colors"
-                  >
-                    +234 806 878 6708
-                  </a>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <Mail className="w-4 h-4 text-gold mt-0.5 shrink-0" />
-                <a
-                  href="mailto:hello@provictech.com"
-                  className="text-sm text-muted-foreground hover:text-gold transition-colors break-all"
-                >
-                  hello@provictech.com
-                </a>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-gold mt-0.5 shrink-0" />
-                <span className="text-sm text-muted-foreground">Lagos, Nigeria</span>
-              </li>
+          {/* ── Contact column ── */}
+          <div className="sm:col-span-2 lg:col-span-3">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-4 h-px bg-gold" />
+              <span className="text-[10px] tracking-[0.25em] uppercase text-gold font-bold">Contact</span>
+            </div>
+            <ul className="flex flex-col gap-3">
+              {contactItems.map((item) => {
+                const Icon = item.icon
+                return (
+                  <li key={item.label}>
+                    <a
+                      href={item.href}
+                      target={item.label === 'Address' ? '_blank' : undefined}
+                      rel="noreferrer"
+                      className="group flex items-center gap-3"
+                    >
+                      <div className="w-8 h-8 rounded-lg shrink-0
+                        bg-black/[0.03] dark:bg-white/[0.04]
+                        border border-black/8 dark:border-white/8
+                        group-hover:border-gold/35 group-hover:bg-gold/[0.06]
+                        flex items-center justify-center transition-all duration-300">
+                        <Icon className="w-3.5 h-3.5 text-black/40 dark:text-white/40 group-hover:text-gold transition-colors duration-300" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] tracking-[0.15em] uppercase text-black/30 dark:text-white/30">
+                          {item.label}
+                        </p>
+                        <p className="text-xs font-semibold text-black/55 dark:text-white/55
+                          group-hover:text-black dark:group-hover:text-white truncate transition-colors duration-200">
+                          {item.value}
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                )
+              })}
             </ul>
           </div>
-
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-            <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left">
+      {/* ══════════════ BOTTOM BAR ══════════════ */}
+      <div className="relative border-t border-black/[0.06] dark:border-white/[0.06]">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-14 py-5">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+
+            <p className="text-[11px] text-black/35 dark:text-white/35 tracking-wide">
               © {new Date().getFullYear()} Provic Technologies. All rights reserved.
             </p>
-            <div className="flex items-center gap-4 sm:gap-6">
-              <Link
-                href="/faq"
-                className="text-xs sm:text-sm text-muted-foreground hover:text-gold transition-colors whitespace-nowrap"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/faq"
-                className="text-xs sm:text-sm text-muted-foreground hover:text-gold transition-colors whitespace-nowrap"
-              >
-                Terms of Service
-              </Link>
+
+            <div className="flex items-center gap-6">
+              {[
+                { label: 'Privacy Policy',    href: '/privacy' },
+                { label: 'Terms of Service',  href: '/terms'   },
+              ].map((l) => (
+                <Link
+                  key={l.label}
+                  href={l.href}
+                  className="text-[11px] text-black/35 dark:text-white/35 hover:text-gold transition-colors duration-200 tracking-wide whitespace-nowrap"
+                >
+                  {l.label}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
