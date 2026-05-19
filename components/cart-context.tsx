@@ -1,7 +1,13 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
-import { type Product } from '@/lib/data'
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  type ReactNode,
+} from 'react'
+import type { Product } from '@/lib/data'
 
 export interface CartItem {
   product: Product
@@ -9,53 +15,78 @@ export interface CartItem {
 }
 
 interface CartContextValue {
-  items:       CartItem[]
-  totalCount:  number
-  totalPrice:  number
-  addItem:     (product: Product) => void
-  removeItem:  (productId: string) => void
-  updateQty:   (productId: string, qty: number) => void
-  clearCart:   () => void
-  isOpen:      boolean
-  openCart:    () => void
-  closeCart:   () => void
+  items: CartItem[]
+  addItem: (product: Product) => void
+  removeItem: (productId: string) => void
+  updateQuantity: (productId: string, quantity: number) => void
+  clearCart: () => void
+  totalItems: number
+  totalCount: number   // alias for navbar badge
+  totalPrice: number
+  isCartOpen: boolean
+  openCart: () => void
+  closeCart: () => void
 }
 
 const CartContext = createContext<CartContextValue | null>(null)
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items,   setItems  ] = useState<CartItem[]>([])
-  const [isOpen,  setIsOpen ] = useState(false)
-
-  const totalCount = items.reduce((s, i) => s + i.quantity, 0)
-  const totalPrice = items.reduce((s, i) => s + i.product.price * i.quantity, 0)
+  const [items, setItems] = useState<CartItem[]>([])
+  const [isCartOpen, setIsCartOpen] = useState(false)
 
   const addItem = useCallback((product: Product) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.product.id === product.id)
-      if (existing) return prev.map((i) => i.product.id === product.id ? { ...i, quantity: i.quantity + 1 } : i)
+      if (existing) {
+        return prev.map((i) =>
+          i.product.id === product.id
+            ? { ...i, quantity: i.quantity + 1 }
+            : i
+        )
+      }
       return [...prev, { product, quantity: 1 }]
     })
-    setIsOpen(true)
   }, [])
 
   const removeItem = useCallback((productId: string) => {
     setItems((prev) => prev.filter((i) => i.product.id !== productId))
   }, [])
 
-  const updateQty = useCallback((productId: string, qty: number) => {
-    if (qty < 1) return
-    setItems((prev) => prev.map((i) => i.product.id === productId ? { ...i, quantity: qty } : i))
+  const updateQuantity = useCallback((productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      setItems((prev) => prev.filter((i) => i.product.id !== productId))
+    } else {
+      setItems((prev) =>
+        prev.map((i) =>
+          i.product.id === productId ? { ...i, quantity } : i
+        )
+      )
+    }
   }, [])
 
   const clearCart = useCallback(() => setItems([]), [])
+  const openCart  = useCallback(() => setIsCartOpen(true),  [])
+  const closeCart = useCallback(() => setIsCartOpen(false), [])
+
+  const totalItems = items.reduce((sum, i) => sum + i.quantity, 0)
+  const totalPrice = items.reduce((sum, i) => sum + i.product.price * i.quantity, 0)
 
   return (
-    <CartContext.Provider value={{
-      items, totalCount, totalPrice,
-      addItem, removeItem, updateQty, clearCart,
-      isOpen, openCart: () => setIsOpen(true), closeCart: () => setIsOpen(false),
-    }}>
+    <CartContext.Provider
+      value={{
+        items,
+        addItem,
+        removeItem,
+        updateQuantity,
+        clearCart,
+        totalItems,
+        totalCount: totalItems, // navbar reads totalCount
+        totalPrice,
+        isCartOpen,
+        openCart,
+        closeCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   )
