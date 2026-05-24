@@ -7,6 +7,7 @@ import { Navbar } from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
 import { CartProvider } from '@/components/cart-context'
 import { CartDrawer } from '@/components/cart-drawer'
+import { AuthProvider } from '@/components/auth/auth-context'
 import './globals.css'
 
 const bebasNeue = Bebas_Neue({
@@ -95,7 +96,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange={false}
         >
-          <CartProvider>
+          <AuthProvider>
+             <CartProvider>
             <div className="relative min-h-screen flex flex-col">
               <Navbar />
               <CartDrawer />
@@ -105,6 +107,7 @@ export default function RootLayout({
               <Footer />
             </div>
           </CartProvider>
+          </AuthProvider>
         </ThemeProvider>
 
         {process.env.NODE_ENV === 'production' && <Analytics />}
